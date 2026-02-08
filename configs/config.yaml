@@ -1,0 +1,219 @@
+# MixRAGRec Configuration
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Agent Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+agents:
+  num_experts: 4  # Number of retrieval experts (1-4)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dataset Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+dataset:
+  lfm1k:
+    data_file: data/LFM/lfm1k.json
+    domain: music
+    kg_db_path: data/parsed_kg_lastfm.db
+    map_file: data/LFM/maps-lfm1k.tsv
+    train_ratio: 0.9
+  ml1m:
+    data_file: data/movielens/ml1m.json
+    domain: movie
+    kg_db_path: data/parsed_kg_from_dump.db
+    map_file: data/movielens/map.csv
+    train_ratio: 0.9
+  ml1m_test:
+    data_file: data/movielens/ml1m_for_test.json
+    domain: movie
+    kg_db_path: data/kg_test.db
+    kg_indices_path: data/kg_indices_test/
+    map_file: data/movielens/map.csv
+    train_ratio: 0.9
+  ml20m:
+    data_file: data/movielens20M/ml20m.json
+    domain: movie
+    kg_db_path: data/parsed_kg_ml20m.db
+    map_file: data/movielens20M/movies_dbpedia.csv
+    train_ratio: 0.9
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Device Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+device: cuda:0
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Experiment Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+experiment:
+  dataset: ml1m           # Dataset to use: ml1m, lfm1k, ml20m
+  llm: llama-8b           # LLM backbone: llama-8b, mistral-7b, qwen-7b
+  model_name: MixRAGRec   # Model name for saving
+  suffix: ""              # Optional suffix for experiment name
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Knowledge Graph Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+knowledge_graph:
+  default_expert: 2                    # Default expert ID (1-4)
+  kg_db_path: data/parsed_kg_from_dump.db
+  kg_indices_path: data/kg_indices/
+  max_neighbors_per_hop: 20            # Max neighbors for subgraph extraction
+  max_subgraph_radius: 2               # Max hops for subgraph extraction
+  retrieval_top_m: 3                   # Top-M retrieval results
+  pagerank_alpha: 0.85                 # PageRank damping factor
+  pagerank_max_iter: 100               # PageRank max iterations
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# LLM Presets Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+llm_presets:
+  llama-8b:
+    hf_token: ""  # Add your HuggingFace token here
+    model_name: meta-llama/Llama-3.1-8B-Instruct
+    model_type: causal
+  mistral-7b:
+    hf_token: ""
+    model_name: mistralai/Mistral-7B-Instruct-v0.3
+    model_type: causal
+  qwen-7b:
+    hf_token: ""
+    model_name: Qwen/Qwen2.5-7B-Instruct
+    model_type: causal
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Logging Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+log_level: INFO
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MARL Configuration (Multi-Agent Reinforcement Learning)
+# ═══════════════════════════════════════════════════════════════════════════════
+marl:
+  # Preference optimization config (for Recommendation Agent)
+  preference:
+    beta: 0.2                      # Temperature parameter for preference optimization
+    num_hard_negatives: 10          # Number of hard negatives for training
+    use_hard_negatives: true       # Enable hard negative sampling
+  
+  # Enable parallel update for multi-GPU
+  enable_parallel_update: false
+  
+  # Policy optimization config (for Expert Selector and Knowledge Alignment Agent)
+  policy:
+    batch_size: 64
+    buffer_size: 2048
+    clip_epsilon: 0.2              # Clipping parameter
+    entropy_coef: 0.01             # Entropy coefficient for exploration
+    gae_lambda: 0.95               # GAE lambda
+    gamma: 0.99                    # Discount factor
+    learning_rate: 0.0003          # Learning rate
+    max_grad_norm: 0.5             # Max gradient norm for clipping
+    optimization_epochs: 4         # Number of optimization epochs per update
+    value_loss_coef: 0.5           # Value loss coefficient
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Models Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+models:
+  # Sentence encoder for embeddings
+  encoder:
+    model_name: sentence-transformers/all-MiniLM-L6-v2
+  
+  # Knowledge Alignment Agent configuration
+  knowledge_aligner:
+    device_id: null                # GPU ID (null for auto)
+    max_input_length: 2048
+    max_new_tokens: 256
+    quantization_bits: 8
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 50
+    use_quantization: false
+    use_peft: true                 # Enable LoRA
+    lora_r: 8                      # LoRA rank
+    lora_alpha: 16                 # LoRA alpha
+    lora_dropout: 0.05             # LoRA dropout
+  
+  # Recommendation Agent configuration
+  recommender:
+    device_id: null                # GPU ID (null for auto)
+    answer_max_tokens: 1           # Fast mode: single token generation
+    enable_constrained_decoding: true
+    enable_explanation: true       # Enable explanation generation
+    max_input_length: 3072
+    max_new_tokens: 512
+    quantization_bits: 8
+    explanation_max_tokens: 256    # Max tokens for explanation
+    temperature: 0.8
+    top_p: 0.9
+    top_k: 50
+    use_quantization: false
+    use_peft: true                 # Enable LoRA
+    lora_r: 8                      # LoRA rank
+    lora_alpha: 16                 # LoRA alpha
+    lora_dropout: 0.05             # LoRA dropout
+    preference_beta: 0.1           # Preference optimization beta
+  
+  # Expert Selector Agent configuration
+  rl_selector:
+    hidden_dims:
+      - 256
+      - 128
+    learning_rate: 0.0003
+    state_dim: 64
+    num_retrievers: 4              # Number of retrieval experts
+    epsilon_start: 1.0             # Initial exploration rate
+    epsilon_end: 0.05              # Final exploration rate
+    epsilon_decay: 0.995           # Exploration decay rate
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Reward Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+reward:
+  diversity_weight: 0.3
+  eta_cost: 0.005                  # Cost penalty coefficient η
+  lambda_mig: 0.2                  # MIG weight coefficient λ
+  quality_weight: 0.3
+  relevance_weight: 0.4
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Random Seed
+# ═══════════════════════════════════════════════════════════════════════════════
+seed: 42
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Training Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+training:
+  evaluation_interval: 50          # Evaluate every N episodes
+  log_interval: 10                 # Log every N episodes
+  max_steps_per_episode: 100       # Max steps per episode
+  save_interval: 100               # Save checkpoint every N episodes
+  total_episodes: 1000             # Total training episodes
+  warmup_episodes: 50              # Warmup episodes before training
+  samples_per_epoch: 200           # Samples per epoch
+  num_epochs: 150                  # Total training epochs
+  gradient_accumulation_steps: 4   # Gradient accumulation steps
+  early_stopping_patience: 20      # Early stopping patience
+  best_metric: accuracy            # Metric for best model selection
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Evaluation Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+evaluation:
+  batch_size: 32
+  metrics:
+    - accuracy
+    - recall@3
+    - recall@5
+    - mrr
+  save_predictions: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Checkpoint Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+checkpoint:
+  save_dir: saved_models
+  keep_last_n: 5                   # Keep last N checkpoints
+  save_best_only: false            # Save all checkpoints or best only

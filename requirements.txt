@@ -1,0 +1,19 @@
+# MixRAGRec Dependencies
+
+# Core ML
+torch>=2.0.0
+numpy>=1.24.0
+
+# Transformers and LLM
+transformers>=4.36.0
+peft>=0.7.0
+accelerate>=0.25.0
+bitsandbytes>=0.41.0
+sentence-transformers>=2.2.0
+
+# Data processing
+pyyaml>=6.0
+tqdm>=4.65.0
+
+# Optional: Visualization
+matplotlib>=3.7.0
