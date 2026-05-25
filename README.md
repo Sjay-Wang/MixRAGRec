@@ -1,6 +1,7 @@
 # MixRAGRec
 
-**This is the pytorch implementation for our MixRAGRec.**
+**This is the pytorch implementation for our KDD paper "Mixture-of-Experts Knowledge Graph Retrieval-Augmented
+Generation for Multi-Agent LLM-based Recommendation".**
 
 ## Architecture
 
@@ -30,7 +31,11 @@ pip install -r requirements.txt
 
 ### Dataset
 
-Due to space limitations, we provide a **small MovieLens-1M subset** for testing. It includes:
+We provide four datasets (`ml1m_test` (small test set), `ml1m`, `ml20m`, `lfm1k`). 
+
+Due to space limitations, the full KG and datasets at https://drive.google.com/drive/folders/1-CpalZvGRzqjBIwwDtOoO4d3uU9OlR4C?usp=sharing.
+
+Taking the **small MovieLens-1M subset** as an example. It includes:
 
 - **Data**: `data/movielens/ml1m_for_test.json` — 1,000 samples (train/test split by `train_ratio` in config)
 - **KG**: `data/kg_test.db` — small knowledge graph (~10K entities, ~20K relations) covering movies in the test set
