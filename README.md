@@ -68,3 +68,24 @@ Edit `configs/config.yaml` to customize:
 - LLM backbone: `llama-8b`, `mistral-7b`
 - Training hyperparameters
 - Agent-specific settings
+
+
+
+
+
+### 🌹Please Cite Our Work If Helpful:
+
+
+
+**Thanks! / 谢谢! / ありがとう! / merci! / 감사! / Danke! / спасибо! / gracias! ...**
+
+
+
+```
+@article{wang2026mixture,
+  title={Mixture-of-Experts Knowledge Graph Retrieval-Augmented Generation for Multi-Agent LLM-based Recommendation},
+  author={Wang, Shijie and Liu, Chengyi and Ding, Yujuan and Lin, Shanru and Ng, See-Kiong and Xin, Xu and Fan, Wenqi},
+  journal={arXiv preprint arXiv:2605.28175},
+  year={2026}
+}
+```
