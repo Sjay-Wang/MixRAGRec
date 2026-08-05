@@ -126,7 +126,13 @@ To evaluate a saved checkpoint:
 python src/test.py --best
 ```
 
-## Citation
+### 🌹Please Cite Our Work If Helpful:
+
+
+
+**Thanks! / 谢谢! / ありがとう! / merci! / 감사! / Danke! / спасибо! / gracias! ...**
+
+
 
 ```bibtex
 @article{wang2026mixture,
