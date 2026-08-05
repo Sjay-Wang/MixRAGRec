@@ -27,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from mixragrec.agents import AgentManager
 from mixragrec.marl import MMAPO, RewardCalculator
-from mixragrec.utils import ConfigLoader
+from mixragrec.utils import ConfigLoader, validate_kg_assets
 
 
 class FullTrainer:
@@ -72,6 +72,14 @@ class FullTrainer:
             self.config['knowledge_graph']['kg_indices_path'] = kg_indices_path
         
         self.config['domain'] = self.domain
+
+        print("\nValidating knowledge graph assets...")
+        kg_summary = validate_kg_assets(self.config)
+        print(
+            f"  KG assets verified: {kg_summary['entities']:,} entities, "
+            f"{kg_summary['triples']:,} triples, "
+            f"embedding dim {kg_summary['embedding_dim']}"
+        )
         
         self.model_save_dir = Path("saved_models") / self.experiment_name
         self.checkpoint_dir = Path("trained_checkpoints")

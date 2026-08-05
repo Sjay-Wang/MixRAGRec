@@ -14,6 +14,7 @@ sentence-transformers>=2.2.0
 # Data processing
 pyyaml>=6.0
 tqdm>=4.65.0
+networkx>=3.0
 
 # Optional: Visualization
 matplotlib>=3.7.0

@@ -14,12 +14,14 @@ dataset:
     data_file: data/LFM/lfm1k.json
     domain: music
     kg_db_path: data/parsed_kg_lastfm.db
+    kg_indices_path: data/kg_indices_lfm1k/
     map_file: data/LFM/maps-lfm1k.tsv
     train_ratio: 0.9
   ml1m:
     data_file: data/movielens/ml1m.json
     domain: movie
     kg_db_path: data/parsed_kg_from_dump.db
+    kg_indices_path: data/kg_indices/
     map_file: data/movielens/map.csv
     train_ratio: 0.9
   ml1m_test:
@@ -33,6 +35,7 @@ dataset:
     data_file: data/movielens20M/ml20m.json
     domain: movie
     kg_db_path: data/parsed_kg_ml20m.db
+    kg_indices_path: data/kg_indices_ml20m/
     map_file: data/movielens20M/movies_dbpedia.csv
     train_ratio: 0.9
 

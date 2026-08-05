@@ -1,0 +1,16 @@
+{
+  "entity_index": {
+    "total_entities": 9970,
+    "embedding_dim": 384,
+    "index_file": "data/kg_indices_test/entity_index.npy",
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2"
+  },
+  "triple_index": {
+    "total_triples": 20292,
+    "embedding_dim": 384,
+    "index_file": "data/kg_indices_test/triple_index.npy",
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2"
+  },
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "device": "precomputed"
+}

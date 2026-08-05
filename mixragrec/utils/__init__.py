@@ -8,6 +8,7 @@ from .config_loader import ConfigLoader
 from .llm_loader import LLMLoader
 from .logger import Logger
 from .metrics import MetricsCollector
+from .kg_assets import validate_kg_assets
 
 __all__ = [
     "DataGenerator",
@@ -15,5 +16,6 @@ __all__ = [
     "ConfigLoader", 
     "LLMLoader",
     "Logger",
-    "MetricsCollector"
+    "MetricsCollector",
+    "validate_kg_assets",
 ]
